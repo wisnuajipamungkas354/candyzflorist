@@ -1,0 +1,103 @@
+---
+const galleryItems = [
+  {
+    title: 'Blushing Rose & Peony Bouquet',
+    category: 'Bouquet',
+    image: 'https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=800&q=80',
+    span: 'col-span-1 md:col-span-2 row-span-2',
+    aspect: 'aspect-square md:aspect-auto h-full min-h-[300px]'
+  },
+  {
+    title: 'Everlasting White Bloom Box',
+    category: 'Everlasting',
+    image: 'https://images.unsplash.com/photo-1534790566855-4cb788d389ec?auto=format&fit=crop&w=600&q=80',
+    span: 'col-span-1',
+    aspect: 'aspect-square'
+  },
+  {
+    title: 'Rustic Sunflower & Daisy Gift',
+    category: 'Fresh Flower',
+    image: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=600&q=80',
+    span: 'col-span-1',
+    aspect: 'aspect-square'
+  },
+  {
+    title: 'Engagement Ring Tray & Floral Decor',
+    category: 'Hantaran',
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80',
+    span: 'col-span-1',
+    aspect: 'aspect-square'
+  },
+  {
+    title: 'Grand Pastel Table Arrangement',
+    category: 'Arrangement',
+    image: 'https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?auto=format&fit=crop&w=600&q=80',
+    span: 'col-span-1',
+    aspect: 'aspect-square'
+  },
+  {
+    title: 'Graduation Surprise Bouquet',
+    category: 'Gift & Graduation',
+    image: 'https://images.unsplash.com/photo-1508610048659-a06b669e3321?auto=format&fit=crop&w=800&q=80',
+    span: 'col-span-1 md:col-span-2',
+    aspect: 'aspect-[16/9] md:aspect-auto min-h-[240px]'
+  }
+];
+---
+
+<section id="gallery" class="py-24 bg-white relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-floral-pink-100 text-floral-pink-700 text-xs font-semibold uppercase tracking-wider mb-4">
+          Our Works
+        </div>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-floral-dark">
+          Galeri Karya Candyzflorist
+        </h2>
+      </div>
+      <p class="text-sm sm:text-base text-floral-muted max-w-md">
+        Setiap karya bunga dirangkai dengan dedikasi tinggi untuk menghadirkan keindahan autentik di setiap momen Anda.
+      </p>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 auto-rows-[240px]">
+      {galleryItems.map((item) => (
+        <div class={`group relative rounded-3xl overflow-hidden shadow-soft bg-floral-pink-50 border border-floral-pink-100 ${item.span}`}>
+          <img
+            src={item.image}
+            alt={item.title}
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            loading="lazy"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+            <span class="text-xs font-semibold text-floral-gold-300 uppercase tracking-wider mb-1">
+              {item.category}
+            </span>
+            <h4 class="font-serif text-lg font-bold text-white leading-snug">
+              {item.title}
+            </h4>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Instagram link -->
+    <div class="mt-12 text-center">
+      <a
+        href="https://instagram.com/candyzflorist_"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 text-sm font-semibold text-floral-pink-600 hover:text-floral-pink-700 transition-colors"
+      >
+        <span>Lihat lebih banyak karya di Instagram @candyzflorist_</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>

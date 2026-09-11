@@ -1,0 +1,72 @@
+---
+const occasions = [
+  {
+    title: 'Birthday & Surprise',
+    icon: '🎂',
+    desc: 'Kado ulang tahun manis penuh senyuman untuk sahabat, pasangan, atau keluarga tercinta.'
+  },
+  {
+    title: 'Graduation & Sidang',
+    icon: '🎓',
+    desc: 'Rayakan kelulusan dan kerja keras dengan bouquet bunga wisuda yang estetik.'
+  },
+  {
+    title: 'Anniversary & Romance',
+    icon: '💖',
+    desc: 'Ungkapkan ketulusan cinta di hari jadian atau pernikahan dengan mawar premium.'
+  },
+  {
+    title: 'Wedding & Engagement',
+    icon: '💍',
+    desc: 'Dekorasi hantaran seserahan, bouquet pengantin, dan rangkaian lamaran elegan.'
+  },
+  {
+    title: 'Congratulations & Opening',
+    icon: '🎉',
+    desc: 'Ucapan sukses grand opening bisnis, promosi jabatan, atau perayaan prestasi.'
+  },
+  {
+    title: 'Get Well & Special Gift',
+    icon: '🌸',
+    desc: 'Beri semangat dan doa kesembuhan dengan rangkaian bunga segar bernuansa ceria.'
+  }
+];
+---
+
+<section id="occasions" class="py-24 bg-white relative overflow-hidden">
+  <!-- Soft Glow -->
+  <div class="absolute -left-20 bottom-10 w-80 h-80 bg-floral-pink-100/50 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-floral-gold-100 text-floral-gold-700 text-xs font-semibold uppercase tracking-wider mb-4">
+        Moments & Occasions
+      </div>
+      <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-floral-dark mb-4">
+        Untuk Setiap Momen Berhargamu
+      </h2>
+      <p class="text-base sm:text-lg text-floral-muted">
+        Apapun perayaannya, Candyzflorist siap melengkapi momen bahagia dengan sentuhan bunga yang berkesan mendalam.
+      </p>
+    </div>
+
+    <!-- Occasions Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      {occasions.map((item) => (
+        <div class="p-8 rounded-3xl bg-floral-cream/70 border border-floral-pink-100/80 hover:bg-white hover:border-floral-pink-300 hover:shadow-soft-lg transition-all duration-300 group">
+          <div class="w-14 h-14 rounded-2xl bg-white shadow-soft flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
+            {item.icon}
+          </div>
+          <h3 class="font-serif text-xl font-bold text-floral-dark group-hover:text-floral-pink-600 transition-colors mb-3">
+            {item.title}
+          </h3>
+          <p class="text-sm text-floral-muted leading-relaxed">
+            {item.desc}
+          </p>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,59 @@
+---
+const benefits = [
+  {
+    icon: '🌹',
+    title: 'Fresh & Beautiful',
+    description: 'Bunga segar berkualitas tinggi yang dipilih secara teliti agar tetap mekar memukau di hari spesial Anda.'
+  },
+  {
+    icon: '🎨',
+    title: 'Beragam Pilihan',
+    description: 'Menyediakan bouquet bunga segar, artificial everlasting, bloom box, standing flower, hingga gift kreatif.'
+  },
+  {
+    icon: '✨',
+    title: 'Bisa Disesuaikan (Custom)',
+    description: 'Bebas menentukan pilihan tema warna, jenis bunga, model wrapping, hingga penyesuaian budget yang fleksibel.'
+  },
+  {
+    icon: '📍',
+    title: 'Local Florist Karawang',
+    description: 'Berlokasi strategis di Telukjambe Karawang dengan layanan pengiriman cepat, aman, dan tepat waktu.'
+  }
+];
+---
+
+<section id="why-us" class="py-24 bg-floral-warm/40 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-floral-pink-100 text-floral-pink-700 text-xs font-semibold uppercase tracking-wider mb-4">
+        Why Candyzflorist?
+      </div>
+      <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-floral-dark mb-4">
+        Alasan Memilih Rangkaian Kami
+      </h2>
+      <p class="text-base sm:text-lg text-floral-muted">
+        Kepuasan dan senyum kebahagiaan Anda adalah prioritas utama dari setiap karya yang kami buat.
+      </p>
+    </div>
+
+    <!-- 4 Benefits Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+      {benefits.map((item) => (
+        <div class="bg-white rounded-3xl p-8 shadow-soft hover:shadow-soft-lg border border-floral-pink-100/70 hover:border-floral-pink-300 transition-all duration-300 flex flex-col items-center text-center group hover:-translate-y-1">
+          <div class="w-16 h-16 rounded-2xl bg-floral-pink-50 group-hover:bg-floral-pink-100 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-all duration-300">
+            {item.icon}
+          </div>
+          <h3 class="font-serif text-xl font-bold text-floral-dark mb-3 group-hover:text-floral-pink-600 transition-colors">
+            {item.title}
+          </h3>
+          <p class="text-sm text-floral-muted leading-relaxed">
+            {item.description}
+          </p>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

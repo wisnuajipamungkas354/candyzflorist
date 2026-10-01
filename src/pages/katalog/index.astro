@@ -489,6 +489,7 @@ const formatPrice = (price: number) => {
   <!-- ================================= -->
   <div
     id="product-modal"
+    data-wa-number={waNumber}
     class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 bg-black/65 backdrop-blur-xs transition-opacity duration-300"
     role="dialog"
     aria-modal="true"
@@ -1150,10 +1151,11 @@ const formatPrice = (price: number) => {
 
     // WhatsApp Action Button Link
     if (modalWaBtn) {
+      const waNum = productModal?.dataset.waNumber || '6289688035866';
       const waText = encodeURIComponent(
         `Halo Candyzflorist, saya tertarik untuk memesan produk: *${product.name}*. Boleh info ketersediaan dan detail pesanannya?`
       );
-      modalWaBtn.href = `https://wa.me/${waNumber}?text=${waText}`;
+      modalWaBtn.href = `https://wa.me/${waNum}?text=${waText}`;
     }
 
     // Open Modal

@@ -344,13 +344,14 @@ const formatPrice = (price: number) => {
 
                 return (
                   <div
-                    class="product-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md border border-gray-100 transition-all duration-300 flex flex-col group hover:-translate-y-1"
+                    class="product-card cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md border border-gray-100 transition-all duration-300 flex flex-col group hover:-translate-y-1"
                     data-category={product.category}
                     data-price={product.price}
+                    data-product={JSON.stringify(product)}
                   >
 
                     <!-- Image (3:4 Portrait) -->
-                    <div class="aspect-[3/4] overflow-hidden bg-floral-pink-50">
+                    <div class="aspect-[3/4] overflow-hidden bg-floral-pink-50 relative">
 
                       <img
                         src={product.image}
@@ -358,6 +359,12 @@ const formatPrice = (price: number) => {
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                       />
+
+                      <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <span class="px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-xs text-floral-dark text-[11px] font-semibold shadow-xs pointer-events-none">
+                          Lihat Detail
+                        </span>
+                      </div>
 
                     </div>
 
@@ -476,6 +483,149 @@ const formatPrice = (price: number) => {
       </div>
     </section>
   </main>
+
+  <!-- ================================= -->
+  <!-- PRODUCT DETAIL MODAL (RESPONSIVE) -->
+  <!-- ================================= -->
+  <div
+    id="product-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 bg-black/65 backdrop-blur-xs transition-opacity duration-300"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+  >
+    <!-- Modal Backdrop Overlay -->
+    <div id="modal-backdrop" class="absolute inset-0"></div>
+
+    <div
+      class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-floral-pink-100 overflow-hidden z-10 flex flex-col max-h-[92vh] sm:max-h-[90vh]"
+    >
+      <!-- Close Floating Button -->
+      <button
+        id="modal-close-btn"
+        type="button"
+        class="absolute top-3 right-3 sm:top-4 sm:right-4 z-30 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 backdrop-blur-xs hover:bg-floral-pink-50 text-floral-dark hover:text-floral-pink-600 shadow-md border border-floral-pink-100 flex items-center justify-center transition-all duration-200"
+        aria-label="Tutup"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Scrollable Modal Body -->
+      <div class="overflow-y-auto p-4 sm:p-6 lg:p-7">
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-5 sm:gap-7 items-start">
+          
+          <!-- Left: Image Slider (3:4 Portrait) -->
+          <div class="sm:col-span-5 flex flex-col items-center gap-3">
+            <div class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-floral-pink-50 border border-floral-pink-100 shadow-inner group select-none">
+              
+              <!-- Slides Container -->
+              <div id="modal-slider-track" class="w-full h-full flex transition-transform duration-300 ease-out">
+                <!-- Dynamically populated <img> elements -->
+              </div>
+
+              <!-- Prev / Next Navigation buttons -->
+              <button
+                id="modal-prev-btn"
+                type="button"
+                class="hidden absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 backdrop-blur-xs text-floral-dark hover:bg-floral-pink-500 hover:text-white shadow-md items-center justify-center transition-all z-20"
+                aria-label="Foto sebelumnya"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              <button
+                id="modal-next-btn"
+                type="button"
+                class="hidden absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 backdrop-blur-xs text-floral-dark hover:bg-floral-pink-500 hover:text-white shadow-md items-center justify-center transition-all z-20"
+                aria-label="Foto berikutnya"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              <!-- Image Index Badge -->
+              <div
+                id="modal-image-counter"
+                class="hidden absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-xs text-white text-[11px] font-semibold tracking-wider z-20"
+              >
+                1 / 1
+              </div>
+            </div>
+
+            <!-- Thumbnail Strip (if multiple images) -->
+            <div id="modal-thumbnails" class="hidden flex items-center justify-center gap-2 w-full overflow-x-auto py-1">
+              <!-- Dynamically created small thumbnails -->
+            </div>
+          </div>
+
+          <!-- Right: Product Information & CTA -->
+          <div class="sm:col-span-7 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <!-- Category Badge -->
+              <div id="modal-categories" class="flex flex-wrap gap-1.5 items-center">
+                <!-- Dynamically populated category tags -->
+              </div>
+
+              <!-- Product Title -->
+              <h3
+                id="modal-title"
+                class="font-serif text-xl sm:text-2xl font-bold text-floral-dark leading-tight pr-6 sm:pr-0"
+              ></h3>
+
+              <!-- Price -->
+              <div class="flex items-baseline gap-2">
+                <span
+                  id="modal-price"
+                  class="text-xl sm:text-2xl font-bold text-floral-pink-600"
+                ></span>
+              </div>
+
+              <!-- Divider -->
+              <div class="border-t border-floral-pink-100/80 my-2 sm:my-3"></div>
+
+              <!-- Description -->
+              <div class="space-y-1.5">
+                <h4 class="text-xs font-semibold uppercase tracking-wider text-floral-dark/70">
+                  Deskripsi Produk
+                </h4>
+                <p
+                  id="modal-description"
+                  class="text-xs sm:text-sm text-floral-muted leading-relaxed whitespace-pre-line"
+                >
+                  Rangkaian bunga eksklusif berkualitas tinggi dari Candyzflorist Karawang.
+                </p>
+              </div>
+            </div>
+
+            <!-- WhatsApp Order Action Button -->
+            <div class="pt-4 border-t border-floral-pink-100/80">
+              <a
+                id="modal-wa-btn"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="w-full inline-flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-floral-pink-500 to-floral-pink-600 hover:from-floral-pink-600 hover:to-floral-pink-700 text-white font-semibold text-sm sm:text-base shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-current shrink-0" viewBox="0 0 24 24">
+                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                </svg>
+                <span>Pesan Sekarang via WhatsApp</span>
+              </a>
+              <p class="text-[11px] text-center text-floral-muted mt-2">
+                Langsung terhubung dengan Florist kami untuk konfirmasi kustom & jadwal pengiriman.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
 
   <Footer />
 </Layout>
@@ -821,6 +971,232 @@ const formatPrice = (price: number) => {
   closeFilter?.addEventListener('click', closeFilterPanel);
   filterOverlay?.addEventListener('click', closeFilterPanel);
   applyFilter?.addEventListener('click', closeFilterPanel);
+
+  /*
+   * ==========================================
+   * PRODUCT DETAIL MODAL & IMAGE SLIDER
+   * ==========================================
+   */
+
+  const productModal = document.getElementById('product-modal');
+  const modalBackdrop = document.getElementById('modal-backdrop');
+  const modalCloseBtn = document.getElementById('modal-close-btn');
+  const modalSliderTrack = document.getElementById('modal-slider-track');
+  const modalPrevBtn = document.getElementById('modal-prev-btn');
+  const modalNextBtn = document.getElementById('modal-next-btn');
+  const modalImageCounter = document.getElementById('modal-image-counter');
+  const modalThumbnails = document.getElementById('modal-thumbnails');
+  const modalTitle = document.getElementById('modal-title');
+  const modalPrice = document.getElementById('modal-price');
+  const modalCategories = document.getElementById('modal-categories');
+  const modalDescription = document.getElementById('modal-description');
+  const modalWaBtn = document.getElementById('modal-wa-btn') as HTMLAnchorElement | null;
+
+  let modalImages: string[] = [];
+  let modalSlideIndex = 0;
+
+  function updateModalSlider() {
+    if (!modalSliderTrack) return;
+    modalSliderTrack.style.transform = `translateX(-${modalSlideIndex * 100}%)`;
+
+    if (modalImageCounter) {
+      modalImageCounter.textContent = `${modalSlideIndex + 1} / ${modalImages.length}`;
+    }
+
+    if (modalThumbnails) {
+      Array.from(modalThumbnails.children).forEach((thumb, idx) => {
+        if (idx === modalSlideIndex) {
+          thumb.classList.add('ring-2', 'ring-floral-pink-500', 'opacity-100');
+          thumb.classList.remove('opacity-60');
+        } else {
+          thumb.classList.remove('ring-2', 'ring-floral-pink-500', 'opacity-100');
+          thumb.classList.add('opacity-60');
+        }
+      });
+    }
+  }
+
+  function goToModalSlide(index: number) {
+    if (modalImages.length <= 1) return;
+    if (index < 0) {
+      modalSlideIndex = modalImages.length - 1;
+    } else if (index >= modalImages.length) {
+      modalSlideIndex = 0;
+    } else {
+      modalSlideIndex = index;
+    }
+    updateModalSlider();
+  }
+
+  modalPrevBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    goToModalSlide(modalSlideIndex - 1);
+  });
+
+  modalNextBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    goToModalSlide(modalSlideIndex + 1);
+  });
+
+  // Mobile Touch Swipe Support
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  modalSliderTrack?.parentElement?.addEventListener(
+    'touchstart',
+    (e: TouchEvent) => {
+      touchStartX = e.changedTouches[0].screenX;
+    },
+    { passive: true }
+  );
+
+  modalSliderTrack?.parentElement?.addEventListener(
+    'touchend',
+    (e: TouchEvent) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) {
+          goToModalSlide(modalSlideIndex + 1);
+        } else {
+          goToModalSlide(modalSlideIndex - 1);
+        }
+      }
+    },
+    { passive: true }
+  );
+
+  function openModalWithProduct(product: any) {
+    if (!productModal) return;
+
+    modalImages = Array.isArray(product.images) && product.images.length > 0
+      ? product.images
+      : (product.image ? [product.image] : []);
+
+    modalSlideIndex = 0;
+
+    // Populate Slide Track
+    if (modalSliderTrack) {
+      modalSliderTrack.innerHTML = '';
+      modalImages.forEach((imgSrc: string) => {
+        const slide = document.createElement('div');
+        slide.className = 'w-full h-full shrink-0 flex items-center justify-center bg-floral-pink-50';
+        slide.innerHTML = `<img src="${imgSrc}" alt="${product.name || 'Produk'}" class="w-full h-full object-cover" />`;
+        modalSliderTrack.appendChild(slide);
+      });
+    }
+
+    const hasMultiple = modalImages.length > 1;
+    modalPrevBtn?.classList.toggle('hidden', !hasMultiple);
+    modalPrevBtn?.classList.toggle('flex', hasMultiple);
+    modalNextBtn?.classList.toggle('hidden', !hasMultiple);
+    modalNextBtn?.classList.toggle('flex', hasMultiple);
+    modalImageCounter?.classList.toggle('hidden', !hasMultiple);
+
+    // Thumbnails Strip
+    if (modalThumbnails) {
+      modalThumbnails.innerHTML = '';
+      if (hasMultiple) {
+        modalThumbnails.classList.remove('hidden');
+        modalImages.forEach((imgSrc: string, idx: number) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'w-11 h-14 sm:w-12 sm:h-16 shrink-0 aspect-[3/4] rounded-lg overflow-hidden border border-floral-pink-200 transition-all cursor-pointer';
+          btn.innerHTML = `<img src="${imgSrc}" class="w-full h-full object-cover" />`;
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            goToModalSlide(idx);
+          });
+          modalThumbnails.appendChild(btn);
+        });
+      } else {
+        modalThumbnails.classList.add('hidden');
+      }
+    }
+
+    updateModalSlider();
+
+    // Populate Title & Price
+    if (modalTitle) {
+      modalTitle.textContent = product.name || 'Detail Produk';
+    }
+
+    if (modalPrice) {
+      const pNum = Number(product.price || 0);
+      modalPrice.textContent = `Rp ${pNum.toLocaleString('id-ID')}`;
+    }
+
+    // Populate Category Badges
+    if (modalCategories) {
+      modalCategories.innerHTML = '';
+      const labels = Array.isArray(product.categoryLabels) && product.categoryLabels.length > 0
+        ? product.categoryLabels
+        : (product.category ? [product.category] : []);
+
+      labels.forEach((lbl: string) => {
+        const span = document.createElement('span');
+        span.className = 'px-3 py-1 rounded-full bg-floral-pink-100 text-floral-pink-700 text-xs font-semibold capitalize border border-floral-pink-200/80';
+        span.textContent = lbl.replace(/-/g, ' ');
+        modalCategories.appendChild(span);
+      });
+    }
+
+    // Populate Description
+    if (modalDescription) {
+      modalDescription.textContent = product.deskripsi && product.deskripsi.trim() !== ''
+        ? product.deskripsi
+        : 'Rangkaian bunga eksklusif berkualitas tinggi dari Candyzflorist Karawang. Dirangkai rapi dengan bunga pilihan dan wrapping elegan.';
+    }
+
+    // WhatsApp Action Button Link
+    if (modalWaBtn) {
+      const waText = encodeURIComponent(
+        `Halo Candyzflorist, saya tertarik untuk memesan produk: *${product.name}*. Boleh info ketersediaan dan detail pesanannya?`
+      );
+      modalWaBtn.href = `https://wa.me/${waNumber}?text=${waText}`;
+    }
+
+    // Open Modal
+    productModal.classList.remove('hidden');
+    productModal.classList.add('flex');
+    document.body.classList.add('overflow-hidden');
+  }
+
+  function closeProductModal() {
+    if (!productModal) return;
+    productModal.classList.add('hidden');
+    productModal.classList.remove('flex');
+    document.body.classList.remove('overflow-hidden');
+  }
+
+  modalCloseBtn?.addEventListener('click', closeProductModal);
+  modalBackdrop?.addEventListener('click', closeProductModal);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && productModal && !productModal.classList.contains('hidden')) {
+      closeProductModal();
+    }
+  });
+
+  // Attach Click Listener to Each Product Card
+  productCards.forEach((card) => {
+    card.addEventListener('click', (e) => {
+      // If user directly clicked the "Pesan via WA" link, allow direct navigation
+      if ((e.target as HTMLElement).closest('a')) {
+        return;
+      }
+
+      const raw = card.dataset.product;
+      if (raw) {
+        try {
+          const product = JSON.parse(raw);
+          openModalWithProduct(product);
+        } catch (err) {
+          console.error('Error parsing product data:', err);
+        }
+      }
+    });
+  });
 
   /*
    * ==========================================

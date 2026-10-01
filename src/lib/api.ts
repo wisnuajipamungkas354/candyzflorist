@@ -53,13 +53,35 @@ export async function fetchProducts(options: { page?: number; limit?: number; ka
         const rawList = json.data?.items || (Array.isArray(json.data) ? json.data : null);
 
         if (json.success && Array.isArray(rawList)) {
-          return rawList.map((p: any) => ({
-            name: p.name || p.nama_produk,
-            category: p.category || (p.categories && p.categories[0]) || 'ready-stock',
-            price: Number(p.price || p.harga || 0),
-            image: p.image || (p.foto_produk && p.foto_produk[0]) || '',
-            deskripsi: p.deskripsi || '',
-          }));
+          return rawList.map((p: any) => {
+            let photos: string[] = [];
+            if (Array.isArray(p.foto_produk)) {
+              photos = p.foto_produk;
+            } else if (typeof p.foto_produk === 'string' && p.foto_produk) {
+              photos = [p.foto_produk];
+            } else if (p.image) {
+              photos = [p.image];
+            }
+
+            let catLabels: string[] = [];
+            if (Array.isArray(p.category_labels)) {
+              catLabels = p.category_labels;
+            } else if (typeof p.category_labels === 'string' && p.category_labels) {
+              catLabels = [p.category_labels];
+            }
+
+            return {
+              id: p.id,
+              name: p.name || p.nama_produk,
+              slug: p.slug,
+              category: p.category || (Array.isArray(p.categories) ? p.categories[0] : (typeof p.categories === 'string' ? p.categories : 'ready-stock')),
+              categoryLabels: catLabels,
+              price: Number(p.price || p.harga || 0),
+              image: photos[0] || p.image || '',
+              images: photos,
+              deskripsi: p.deskripsi || '',
+            };
+          });
         }
       }
     } finally {

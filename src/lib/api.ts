@@ -31,6 +31,18 @@ export async function fetchCategories() {
   return [];
 }
 
+export function normalizeImageUrl(url: string): string {
+  if (!url || typeof url !== 'string') return '';
+  url = url.trim();
+  if (url.startsWith('http://')) {
+    return url.replace('http://', 'https://');
+  }
+  if (url.startsWith('//')) {
+    return `https:${url}`;
+  }
+  return url;
+}
+
 // Fetch Products from Golang Backend
 export async function fetchProducts(options: { page?: number; limit?: number; kategori?: string; search?: string } = {}) {
   try {
@@ -63,6 +75,8 @@ export async function fetchProducts(options: { page?: number; limit?: number; ka
               photos = [p.image];
             }
 
+            photos = photos.map(normalizeImageUrl).filter(Boolean);
+
             let catLabels: string[] = [];
             if (Array.isArray(p.category_labels)) {
               catLabels = p.category_labels;
@@ -77,7 +91,7 @@ export async function fetchProducts(options: { page?: number; limit?: number; ka
               category: p.category || (Array.isArray(p.categories) ? p.categories[0] : (typeof p.categories === 'string' ? p.categories : 'ready-stock')),
               categoryLabels: catLabels,
               price: Number(p.price || p.harga || 0),
-              image: photos[0] || p.image || '',
+              image: photos[0] || '',
               images: photos,
               deskripsi: p.deskripsi || '',
             };

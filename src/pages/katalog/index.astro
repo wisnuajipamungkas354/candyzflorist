@@ -343,11 +343,8 @@ const products = [
 const allProducts = (apiProducts && apiProducts.length > 0) ? [...apiProducts, ...products] : products;
 
 const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    maximumFractionDigits: 0,
-  }).format(price);
+  if (!price || isNaN(price)) return 'Rp 0';
+  return `Rp ${Number(price).toLocaleString('id-ID')}`;
 };
 ---
 

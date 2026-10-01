@@ -14,10 +14,10 @@ const tiktokHandle = "@" + (tiktokUrl.split('/').filter(Boolean).pop()?.replace(
 const linkedinUrl = "https://www.linkedin.com/company/candyzflorist/";
 const addressText = storeSettings.alamat || "Blok F No.528, Perumnas bumi, Telukjambe Timur, Karawang, Jawa Barat 41361";
 const mapsSearchUrl = "https://maps.app.goo.gl/Dc9zeMDpkT5RfMJ27";
-const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent("Halo Candyzflorist (Kak Niken), saya ingin konsultasi & order bunga untuk momen spesial.")}`;
+const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent("Halo Candyzflorist, saya ingin konsultasi & order bunga untuk momen spesial.")}`;
 
 // Generate QR Code URL via reliable QR API for direct WhatsApp chat
-const waQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(`https://wa.me/${waNumber}?text=Halo%20Candyzflorist%20(Kak%20Niken),%20saya%20ingin%20tanya%20order%20bunga`)}`;
+const waQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(`https://wa.me/${waNumber}?text=Halo%20Candyzflorist,%20saya%20ingin%20tanya%20order%20bunga`)}`;
 ---
 
 <section id="contact" class="py-24 bg-floral-cream/70 relative overflow-hidden">
@@ -45,7 +45,7 @@ const waQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=$
       <!-- Left Column: Business Card Details & Contacts -->
       <div class="lg:col-span-6 space-y-5">
         
-        <!-- Florist Owner Identity Card (Inspired by Business Card) -->
+        <!-- Florist Identity Card (Inspired by Business Card) -->
         <div class="p-6 sm:p-7 rounded-3xl bg-white border border-floral-pink-200 shadow-soft relative overflow-hidden group">
           <!-- Background decorative logo watermarked -->
           <div class="absolute -right-6 -bottom-6 w-36 h-36 opacity-5 pointer-events-none">
@@ -62,8 +62,8 @@ const waQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=$
                 </div>
               </div>
               <div>
-                <h3 class="font-serif text-2xl font-bold text-floral-dark tracking-tight">Niken Hartanti</h3>
-                <p class="text-sm font-serif italic text-floral-pink-600 font-medium">Owner and Florist</p>
+                <h3 class="font-serif text-2xl font-bold text-floral-dark tracking-tight">Candyzflorist</h3>
+                <p class="text-sm font-serif italic text-floral-pink-600 font-medium">Floral Studio & Gift</p>
               </div>
             </div>
             

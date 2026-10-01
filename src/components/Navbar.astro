@@ -12,6 +12,7 @@ const navLinks = [
 const waNumber = "6289688035866";
 const defaultWaMessage = encodeURIComponent("Halo Candyzflorist, saya ingin tanya/pesan rangkaian bunga untuk momen spesial.");
 const waLink = `https://wa.me/${waNumber}?text=${defaultWaMessage}`;
+const adminLoginUrl = "https://admin-candyzflorist.vercel.app/";
 ---
 
 <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md bg-white/80 border-b border-floral-pink-100/80 shadow-sm" id="navbar">
@@ -45,8 +46,22 @@ const waLink = `https://wa.me/${waNumber}?text=${defaultWaMessage}`;
         ))}
       </nav>
 
-      <!-- CTA Order Button -->
+      <!-- CTA Buttons -->
       <div class="hidden sm:flex items-center gap-3">
+        <a
+          href={adminLoginUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-floral-pink-200 hover:border-floral-pink-400 text-floral-pink-700 hover:bg-floral-pink-50/80 text-sm font-semibold transition-all duration-300 shadow-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-floral-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+            <polyline points="10 17 15 12 10 7" />
+            <line x1="15" y1="12" x2="3" y2="12" />
+          </svg>
+          <span>Login</span>
+        </a>
+
         <a
           href={waLink}
           target="_blank"
@@ -91,14 +106,29 @@ const waLink = `https://wa.me/${waNumber}?text=${defaultWaMessage}`;
           {link.name}
         </a>
       ))}
-      <a
-        href={waLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="mt-2 w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-floral-pink-500 to-floral-pink-600 text-white font-semibold shadow-soft"
-      >
-        <span>Pesan via WhatsApp</span>
-      </a>
+      <div class="pt-2 flex flex-col gap-2.5">
+        <a
+          href={adminLoginUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-floral-pink-300 text-floral-pink-700 hover:bg-floral-pink-50 font-semibold text-sm transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-floral-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+            <polyline points="10 17 15 12 10 7" />
+            <line x1="15" y1="12" x2="3" y2="12" />
+          </svg>
+          <span>Login Admin</span>
+        </a>
+        <a
+          href={waLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-floral-pink-500 to-floral-pink-600 text-white font-semibold shadow-soft"
+        >
+          <span>Pesan via WhatsApp</span>
+        </a>
+      </div>
     </div>
   </div>
 </header>

@@ -2,22 +2,14 @@
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
+import { fetchCategories, fetchProducts, fetchStoreSettings } from '../../lib/api';
 
-const waNumber = '628XXXXXXXXXX';
+const storeSettings = await fetchStoreSettings();
+const waNumber = storeSettings.whatsapp ? storeSettings.whatsapp.replace(/^0/, '62') : '6289688035866';
 
-const categories = [
-  { id: 'ready-stock', label: 'Bouquet Ready Stock' },
-  { id: 'wisuda', label: 'Bouquet Wisuda' },
-  { id: 'bag-charm', label: 'Bag Charm Bouquet' },
-  { id: 'snack', label: 'Snack Bouquet' },
-  { id: 'mini', label: 'Mini Bouquet' },
-  { id: 'wedding', label: 'Hand Bouquet Wedding' },
-  { id: 'flower-box', label: 'Flower Box / Bloom Box' },
-  { id: 'vase', label: 'Vase Bouquet' },
-  { id: 'custom', label: 'Custom Bouquet' },
-  { id: 'karangan', label: 'Karangan Bunga' },
-  { id: 'money', label: 'Money Bouquet' },
-];
+// Ambil kategori secara dinamis dari database backend Golang
+const categories = await fetchCategories();
+const apiProducts = await fetchProducts();
 
 const priceRanges = [
   { id: 'under-100', label: 'Di bawah Rp100.000' },
@@ -347,6 +339,9 @@ const products = [
   },
 ];
 
+// Gabungkan produk dari database backend jika ada
+const allProducts = (apiProducts && apiProducts.length > 0) ? [...apiProducts, ...products] : products;
+
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -638,7 +633,7 @@ const formatPrice = (price: number) => {
                   id="product-count"
                   class="font-semibold text-floral-dark"
                 >
-                  {products.length}
+                  {allProducts.length}
                 </span>
                 produk ditemukan
               </p>
@@ -662,7 +657,7 @@ const formatPrice = (price: number) => {
               class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5"
             >
 
-              {products.map((product) => {
+              {allProducts.map((product) => {
 
                 const productWaText = encodeURIComponent(
                   `Halo Candyzflorist, saya tertarik pesan produk: *${product.name}*. Boleh info ketersediaan dan harganya?`
@@ -678,8 +673,8 @@ const formatPrice = (price: number) => {
                     data-price={product.price}
                   >
 
-                    <!-- Image -->
-                    <div class="aspect-square overflow-hidden bg-floral-pink-50">
+                    <!-- Image (3:4 Portrait) -->
+                    <div class="aspect-[3/4] overflow-hidden bg-floral-pink-50">
 
                       <img
                         src={product.image}
@@ -733,6 +728,30 @@ const formatPrice = (price: number) => {
                 );
               })}
 
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- PAGINATION CONTAINER -->
+            <!-- ================================= -->
+
+            <div
+              id="pagination-container"
+              class="mt-10 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4"
+            >
+              <p
+                id="pagination-info"
+                class="text-xs sm:text-sm text-floral-muted font-medium text-center sm:text-left"
+              >
+                Menampilkan 1 – 12 dari 48 produk
+              </p>
+
+              <div
+                id="pagination-controls"
+                class="flex items-center gap-1.5 flex-wrap justify-center"
+              >
+                <!-- Dynamic Page Buttons inserted by JS -->
+              </div>
             </div>
 
 
@@ -814,6 +833,15 @@ const formatPrice = (price: number) => {
   const emptyState =
     document.getElementById('empty-state');
 
+  const paginationContainer =
+    document.getElementById('pagination-container');
+
+  const paginationInfo =
+    document.getElementById('pagination-info');
+
+  const paginationControls =
+    document.getElementById('pagination-controls');
+
   const resetFilter =
     document.getElementById('reset-filter');
 
@@ -838,6 +866,14 @@ const formatPrice = (price: number) => {
   const applyFilter =
     document.getElementById('apply-filter');
 
+  /*
+   * ==========================================
+   * PAGINATION CONFIG
+   * ==========================================
+   */
+
+  let currentPage = 1;
+  const itemsPerPage = 12;
 
   /*
    * ==========================================
@@ -851,13 +887,11 @@ const formatPrice = (price: number) => {
       .map((checkbox) => checkbox.value);
   }
 
-
   function getSelectedPrices(): string[] {
     return Array.from(priceCheckboxes)
       .filter((checkbox) => checkbox.checked)
       .map((checkbox) => checkbox.value);
   }
-
 
   /*
    * ==========================================
@@ -869,176 +903,185 @@ const formatPrice = (price: number) => {
     price: number,
     ranges: string[]
   ): boolean {
-
-    // Tidak ada filter harga
     if (ranges.length === 0) {
       return true;
     }
 
     return ranges.some((range) => {
-
       switch (range) {
-
         case 'under-100':
           return price < 100000;
-
         case '100-200':
-          return price >= 100000 &&
-                 price <= 200000;
-
+          return price >= 100000 && price <= 200000;
         case '200-500':
-          return price > 200000 &&
-                 price <= 500000;
-
+          return price > 200000 && price <= 500000;
         case 'over-500':
           return price > 500000;
-
         default:
           return false;
       }
-
     });
   }
 
+  /*
+   * ==========================================
+   * RENDER PAGINATION BUTTONS
+   * ==========================================
+   */
+
+  function renderPagination(totalVisible: number) {
+    if (!paginationControls || !paginationContainer || !paginationInfo) return;
+
+    const totalPages = Math.ceil(totalVisible / itemsPerPage);
+
+    if (totalVisible === 0 || totalPages <= 1) {
+      paginationContainer.classList.add('hidden');
+      return;
+    }
+
+    paginationContainer.classList.remove('hidden');
+
+    const start = (currentPage - 1) * itemsPerPage + 1;
+    const end = Math.min(currentPage * itemsPerPage, totalVisible);
+    paginationInfo.textContent = `Menampilkan ${start} – ${end} dari ${totalVisible} produk (Halaman ${currentPage} dari ${totalPages})`;
+
+    paginationControls.innerHTML = '';
+
+    // Prev Button
+    const prevBtn = document.createElement('button');
+    prevBtn.type = 'button';
+    prevBtn.disabled = currentPage <= 1;
+    prevBtn.className = `p-2 rounded-lg border border-floral-pink-200 text-floral-dark hover:bg-floral-pink-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed`;
+    prevBtn.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    `;
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        filterProducts();
+        document.getElementById('product-grid')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+    paginationControls.appendChild(prevBtn);
+
+    // Page Buttons
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) {
+        const pageBtn = document.createElement('button');
+        pageBtn.type = 'button';
+        const isCurrent = i === currentPage;
+        pageBtn.className = `min-w-8 h-8 px-2.5 rounded-lg text-xs font-bold transition-all ${
+          isCurrent
+            ? 'bg-floral-pink-600 text-white shadow-sm'
+            : 'border border-floral-pink-200 text-floral-dark hover:bg-floral-pink-50'
+        }`;
+        pageBtn.textContent = String(i);
+        pageBtn.addEventListener('click', () => {
+          currentPage = i;
+          filterProducts();
+          document.getElementById('product-grid')?.scrollIntoView({ behavior: 'smooth' });
+        });
+        paginationControls.appendChild(pageBtn);
+      } else if (
+        (i === currentPage - 2 && i > 1) ||
+        (i === currentPage + 2 && i < totalPages)
+      ) {
+        const ellipsis = document.createElement('span');
+        ellipsis.className = 'px-1.5 text-xs text-floral-muted';
+        ellipsis.textContent = '...';
+        paginationControls.appendChild(ellipsis);
+      }
+    }
+
+    // Next Button
+    const nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.disabled = currentPage >= totalPages;
+    nextBtn.className = `p-2 rounded-lg border border-floral-pink-200 text-floral-dark hover:bg-floral-pink-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed`;
+    nextBtn.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    `;
+    nextBtn.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        filterProducts();
+        document.getElementById('product-grid')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+    paginationControls.appendChild(nextBtn);
+  }
 
   /*
    * ==========================================
-   * FILTER PRODUCTS
+   * FILTER PRODUCTS WITH PAGINATION
    * ==========================================
    */
 
   function filterProducts() {
+    const selectedCategories = getSelectedCategories();
+    const selectedPrices = getSelectedPrices();
 
-    const selectedCategories =
-      getSelectedCategories();
-
-    const selectedPrices =
-      getSelectedPrices();
-
-    let visibleCount = 0;
-
+    const matchedCards: HTMLElement[] = [];
 
     productCards.forEach((card) => {
-
-      const category =
-        card.dataset.category ?? '';
-
-      const price =
-        Number(card.dataset.price ?? 0);
-
-
-      /*
-       * Category
-       *
-       * Jika tidak ada kategori dipilih,
-       * berarti semua kategori.
-       */
+      const category = card.dataset.category ?? '';
+      const price = Number(card.dataset.price ?? 0);
 
       const categoryMatch =
-        selectedCategories.length === 0 ||
-        selectedCategories.includes(category);
+        selectedCategories.length === 0 || selectedCategories.includes(category);
+      const priceMatch = matchPrice(price, selectedPrices);
 
-
-      /*
-       * Price
-       */
-
-      const priceMatch =
-        matchPrice(
-          price,
-          selectedPrices
-        );
-
-
-      /*
-       * Final result
-       */
-
-      const isVisible =
-        categoryMatch &&
-        priceMatch;
-
-
-      if (isVisible) {
-
-        card.style.display = '';
-
-        visibleCount++;
-
+      if (categoryMatch && priceMatch) {
+        matchedCards.push(card);
       } else {
-
         card.style.display = 'none';
-
       }
-
     });
 
+    const totalVisible = matchedCards.length;
+    const totalPages = Math.ceil(totalVisible / itemsPerPage) || 1;
+    if (currentPage > totalPages) {
+      currentPage = totalPages;
+    }
 
-    /*
-     * Update count
-     */
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    matchedCards.forEach((card, index) => {
+      if (index >= startIndex && index < endIndex) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
 
     if (productCount) {
-
-      productCount.textContent =
-        String(visibleCount);
-
+      productCount.textContent = String(totalVisible);
     }
-
-
-    /*
-     * Empty state
-     */
 
     if (emptyState) {
-
-      emptyState.classList.toggle(
-        'hidden',
-        visibleCount > 0
-      );
-
+      emptyState.classList.toggle('hidden', totalVisible > 0);
     }
 
+    renderPagination(totalVisible);
 
-    /*
-     * Mobile filter badge
-     */
-
-    const totalFilters =
-      selectedCategories.length +
-      selectedPrices.length;
-
+    // Mobile filter badge
+    const totalFilters = selectedCategories.length + selectedPrices.length;
     if (mobileFilterCount) {
-
       if (totalFilters > 0) {
-
-        mobileFilterCount.textContent =
-          String(totalFilters);
-
-        mobileFilterCount.classList.remove(
-          'hidden'
-        );
-
-        mobileFilterCount.classList.add(
-          'inline-flex'
-        );
-
+        mobileFilterCount.textContent = String(totalFilters);
+        mobileFilterCount.classList.remove('hidden');
+        mobileFilterCount.classList.add('inline-flex');
       } else {
-
-        mobileFilterCount.classList.add(
-          'hidden'
-        );
-
-        mobileFilterCount.classList.remove(
-          'inline-flex'
-        );
-
+        mobileFilterCount.classList.add('hidden');
+        mobileFilterCount.classList.remove('inline-flex');
       }
-
     }
-
   }
-
 
   /*
    * ==========================================
@@ -1047,24 +1090,18 @@ const formatPrice = (price: number) => {
    */
 
   categoryCheckboxes.forEach((checkbox) => {
-
-    checkbox.addEventListener(
-      'change',
-      filterProducts
-    );
-
+    checkbox.addEventListener('change', () => {
+      currentPage = 1;
+      filterProducts();
+    });
   });
-
 
   priceCheckboxes.forEach((checkbox) => {
-
-    checkbox.addEventListener(
-      'change',
-      filterProducts
-    );
-
+    checkbox.addEventListener('change', () => {
+      currentPage = 1;
+      filterProducts();
+    });
   });
-
 
   /*
    * ==========================================
@@ -1073,34 +1110,20 @@ const formatPrice = (price: number) => {
    */
 
   function resetFilters() {
+    categoryCheckboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
 
-    categoryCheckboxes.forEach(
-      (checkbox) => {
-        checkbox.checked = false;
-      }
-    );
+    priceCheckboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
 
-    priceCheckboxes.forEach(
-      (checkbox) => {
-        checkbox.checked = false;
-      }
-    );
-
+    currentPage = 1;
     filterProducts();
-
   }
 
-
-  resetFilter?.addEventListener(
-    'click',
-    resetFilters
-  );
-
-  desktopReset?.addEventListener(
-    'click',
-    resetFilters
-  );
-
+  resetFilter?.addEventListener('click', resetFilters);
+  desktopReset?.addEventListener('click', resetFilters);
 
   /*
    * ==========================================
@@ -1109,51 +1132,19 @@ const formatPrice = (price: number) => {
    */
 
   function openFilterPanel() {
-
-    filterSidebar?.classList.remove(
-      'hidden'
-    );
-
-    document.body.classList.add(
-      'overflow-hidden'
-    );
-
+    filterSidebar?.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
   }
-
 
   function closeFilterPanel() {
-
-    filterSidebar?.classList.add(
-      'hidden'
-    );
-
-    document.body.classList.remove(
-      'overflow-hidden'
-    );
-
+    filterSidebar?.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
   }
 
-
-  openFilter?.addEventListener(
-    'click',
-    openFilterPanel
-  );
-
-  closeFilter?.addEventListener(
-    'click',
-    closeFilterPanel
-  );
-
-  filterOverlay?.addEventListener(
-    'click',
-    closeFilterPanel
-  );
-
-  applyFilter?.addEventListener(
-    'click',
-    closeFilterPanel
-  );
-
+  openFilter?.addEventListener('click', openFilterPanel);
+  closeFilter?.addEventListener('click', closeFilterPanel);
+  filterOverlay?.addEventListener('click', closeFilterPanel);
+  applyFilter?.addEventListener('click', closeFilterPanel);
 
   /*
    * ==========================================

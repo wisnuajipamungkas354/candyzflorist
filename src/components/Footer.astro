@@ -1,7 +1,15 @@
 ---
+import { fetchStoreSettings } from '../lib/api';
+
 const currentYear = new Date().getFullYear();
-const waNumber = "6289688035866";
+const storeSettings = await fetchStoreSettings();
+const rawWa = storeSettings.whatsapp || "089688035866";
+const waNumber = rawWa.startsWith('0') ? rawWa.replace(/^0/, '62') : rawWa;
 const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent("Halo Candyzflorist, saya ingin tanya/pesan rangkaian bunga.")}`;
+const instagramUrl = storeSettings.instagram || "https://instagram.com/candyzflorist_";
+const tiktokUrl = storeSettings.tiktok || "https://www.tiktok.com/@candyzflorist_";
+const emailAddress = storeSettings.email || "Candyzflorist.id@gmail.com";
+const addressText = storeSettings.alamat || "Blok F No.528, Perumnas bumi, Telukjambe Timur, Karawang, Jawa Barat 41361";
 ---
 
 <footer class="bg-floral-dark text-white pt-16 pb-12 border-t border-floral-pink-900/40">

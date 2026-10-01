@@ -1,13 +1,18 @@
 ---
-const waNumber = "6289688035866";
-const waDisplay = "+62 896-8803-5866";
-const emailAddress = "Candyzflorist.id@gmail.com";
-const instagramHandle = "@candyzflorist_";
-const instagramUrl = "https://instagram.com/candyzflorist_";
-const tiktokHandle = "@candyzflorist_";
-const tiktokUrl = "https://www.tiktok.com/@candyzflorist_?is_from_webapp=1&sender_device=pc";
+import { fetchStoreSettings } from '../lib/api';
+
+const storeSettings = await fetchStoreSettings();
+
+const rawWa = storeSettings.whatsapp || "089688035866";
+const waNumber = rawWa.startsWith('0') ? rawWa.replace(/^0/, '62') : rawWa;
+const waDisplay = rawWa;
+const emailAddress = storeSettings.email || "Candyzflorist.id@gmail.com";
+const instagramUrl = storeSettings.instagram || "https://instagram.com/candyzflorist_";
+const instagramHandle = "@" + (instagramUrl.split('/').filter(Boolean).pop() || "candyzflorist_");
+const tiktokUrl = storeSettings.tiktok || "https://www.tiktok.com/@candyzflorist_";
+const tiktokHandle = "@" + (tiktokUrl.split('/').filter(Boolean).pop()?.replace(/^@/, '') || "candyzflorist_");
 const linkedinUrl = "https://www.linkedin.com/company/candyzflorist/";
-const addressText = "Blok F No.528, Perumnas bumi, Telukjambe Timur, Karawang, Jawa Barat 41361";
+const addressText = storeSettings.alamat || "Blok F No.528, Perumnas bumi, Telukjambe Timur, Karawang, Jawa Barat 41361";
 const mapsSearchUrl = "https://maps.app.goo.gl/Dc9zeMDpkT5RfMJ27";
 const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent("Halo Candyzflorist (Kak Niken), saya ingin konsultasi & order bunga untuk momen spesial.")}`;
 

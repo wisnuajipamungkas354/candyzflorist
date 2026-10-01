@@ -1,5 +1,9 @@
 ---
-const waNumber = "6289688035866";
+import { fetchStoreSettings } from '../lib/api';
+
+const storeSettings = await fetchStoreSettings();
+const rawWa = storeSettings.whatsapp || "089688035866";
+const waNumber = rawWa.startsWith('0') ? rawWa.replace(/^0/, '62') : rawWa;
 const waHeroMessage = encodeURIComponent("Halo Candyzflorist, saya ingin konsultasi & pesan bunga untuk momen spesial.");
 const waLink = `https://wa.me/${waNumber}?text=${waHeroMessage}`;
 ---
@@ -79,7 +83,7 @@ const waLink = `https://wa.me/${waNumber}?text=${waHeroMessage}`;
         
         <!-- Main Floral Card -->
         <div class="relative w-full max-w-md bg-white rounded-3xl p-4 shadow-soft-lg border border-floral-pink-100 overflow-hidden group">
-          <div class="aspect-[4/5] rounded-2xl overflow-hidden bg-floral-pink-100 relative">
+          <div class="aspect-[3/4] rounded-2xl overflow-hidden bg-floral-pink-100 relative">
             <img
               src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=800&q=80"
               alt="Candyzflorist Signature Bouquet"

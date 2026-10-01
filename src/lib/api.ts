@@ -8,13 +8,13 @@ export const API_BASE_URL = import.meta.env?.PUBLIC_API_BASE_URL || 'https://myi
 export async function fetchCategories() {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
     try {
       const res = await fetch(`${API_BASE_URL}/kategori`, { signal: controller.signal });
       clearTimeout(timeoutId);
       if (res.ok) {
         const json = await res.json();
-        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+        if (json.success && Array.isArray(json.data)) {
           return json.data.map((cat: any) => ({
             id: cat.slug,
             label: cat.nama_kategori,
@@ -25,30 +25,17 @@ export async function fetchCategories() {
       clearTimeout(timeoutId);
     }
   } catch (error) {
-    // Fallback diam-diam ke data lokal jika backend tidak aktif
+    console.error('Error fetching categories:', error);
   }
 
-  // Fallback jika backend belum aktif saat build
-  return [
-    { id: 'ready-stock', label: 'Bouquet Ready Stock' },
-    { id: 'wisuda', label: 'Bouquet Wisuda' },
-    { id: 'bag-charm', label: 'Bag Charm Bouquet' },
-    { id: 'snack', label: 'Snack Bouquet' },
-    { id: 'mini', label: 'Mini Bouquet' },
-    { id: 'wedding', label: 'Hand Bouquet Wedding' },
-    { id: 'flower-box', label: 'Flower Box / Bloom Box' },
-    { id: 'vase', label: 'Vase Bouquet' },
-    { id: 'custom', label: 'Custom Bouquet' },
-    { id: 'karangan', label: 'Karangan Bunga' },
-    { id: 'money', label: 'Money Bouquet' },
-  ];
+  return [];
 }
 
 // Fetch Products from Golang Backend
 export async function fetchProducts(options: { page?: number; limit?: number; kategori?: string; search?: string } = {}) {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
     try {
       const searchParams = new URLSearchParams();
       if (options.page) searchParams.append('page', String(options.page));
@@ -65,12 +52,12 @@ export async function fetchProducts(options: { page?: number; limit?: number; ka
         const json = await res.json();
         const rawList = json.data?.items || (Array.isArray(json.data) ? json.data : null);
 
-        if (json.success && Array.isArray(rawList) && rawList.length > 0) {
+        if (json.success && Array.isArray(rawList)) {
           return rawList.map((p: any) => ({
             name: p.name || p.nama_produk,
             category: p.category || (p.categories && p.categories[0]) || 'ready-stock',
             price: Number(p.price || p.harga || 0),
-            image: p.image || (p.foto_produk && p.foto_produk[0]) || '/catalog/ready-stock/01-colorful.png',
+            image: p.image || (p.foto_produk && p.foto_produk[0]) || '',
             deskripsi: p.deskripsi || '',
           }));
         }
@@ -79,10 +66,10 @@ export async function fetchProducts(options: { page?: number; limit?: number; ka
       clearTimeout(timeoutId);
     }
   } catch (error) {
-    // Fallback silent
+    console.error('Error fetching products:', error);
   }
 
-  return null;
+  return [];
 }
 
 // Fetch Store Settings from Golang Backend

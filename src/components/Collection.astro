@@ -6,58 +6,7 @@ const waNumber = storeSettings.whatsapp ? storeSettings.whatsapp.replace(/^0/, '
 
 const apiProducts = await fetchProducts();
 
-const fallbackProducts = [
-  {
-    name: 'COLORFUL',
-    category: 'ready-stock',
-    price: 175000,
-    image: '/catalog/ready-stock/01-colorful.png',
-  },
-  {
-    name: 'TROPHY FLOWERS',
-    category: 'ready-stock',
-    price: 225000,
-    image: '/catalog/ready-stock/02-trophy-flowers.png',
-  },
-  {
-    name: 'CIEL',
-    category: 'ready-stock',
-    price: 100000,
-    image: '/catalog/ready-stock/03-ciel.png',
-  },
-  {
-    name: 'MOCHI',
-    category: 'ready-stock',
-    price: 115000,
-    image: '/catalog/ready-stock/04-mochi.png',
-  },
-  {
-    name: 'Mila',
-    category: 'ready-stock',
-    price: 115000,
-    image: '/catalog/ready-stock/05-mila.png',
-  },
-  {
-    name: 'THUMBELINA BLOOMBOX',
-    category: 'ready-stock',
-    price: 265000,
-    image: '/catalog/ready-stock/06-thumbelina-bloombox.png',
-  },
-  {
-    name: 'Baby Blue',
-    category: 'ready-stock',
-    price: 145000,
-    image: '/catalog/ready-stock/07-baby-blue.png',
-  },
-  {
-    name: 'SOFT PEACH',
-    category: 'ready-stock',
-    price: 147000,
-    image: '/catalog/ready-stock/08-soft-peach.png',
-  },
-];
-
-const products = (apiProducts && apiProducts.length > 0) ? apiProducts.slice(0, 8) : fallbackProducts;
+const products = apiProducts ? apiProducts.slice(0, 8) : [];
 
 const formatPrice = (price: number) => {
   if (!price || isNaN(price)) return 'Rp 0';

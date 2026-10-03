@@ -62,28 +62,28 @@ const waLink = `https://wa.me/${waNumber}?text=${waHeroMessage}`;
         </div>
 
         <!-- Trust Badges List -->
-        <div class="mt-10 pt-8 border-t border-floral-pink-100 grid grid-cols-3 gap-6 w-full max-w-lg">
+        <div class="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-floral-pink-100 grid grid-cols-3 gap-3 sm:gap-6 w-full max-w-lg">
           <div>
-            <div class="font-serif text-2xl font-bold text-floral-pink-600">Fresh</div>
-            <div class="text-xs text-floral-muted mt-0.5">Bunga Segar Pilihan</div>
+            <div class="font-serif text-xl sm:text-2xl font-bold text-floral-pink-600">Fresh</div>
+            <div class="text-[11px] sm:text-xs text-floral-muted leading-tight mt-0.5">Bunga Segar Pilihan</div>
           </div>
           <div>
-            <div class="font-serif text-2xl font-bold text-floral-gold-600">Custom</div>
-            <div class="text-xs text-floral-muted mt-0.5">Desain Sesuai Request</div>
+            <div class="font-serif text-xl sm:text-2xl font-bold text-floral-gold-600">Custom</div>
+            <div class="text-[11px] sm:text-xs text-floral-muted leading-tight mt-0.5">Desain Sesuai Request</div>
           </div>
           <div>
-            <div class="font-serif text-2xl font-bold text-floral-pink-600">Karawang</div>
-            <div class="text-xs text-floral-muted mt-0.5">Pengiriman Cepat</div>
+            <div class="font-serif text-xl sm:text-2xl font-bold text-floral-pink-600">Karawang</div>
+            <div class="text-[11px] sm:text-xs text-floral-muted leading-tight mt-0.5">Pengiriman Cepat</div>
           </div>
         </div>
 
       </div>
 
       <!-- Right Column: Visual Floral Showcase / Card Composition -->
-      <div class="lg:col-span-5 relative flex justify-center items-center">
+      <div class="lg:col-span-5 relative flex justify-center items-center py-4 sm:py-6">
         
         <!-- Main Floral Card -->
-        <div class="relative w-full max-w-md bg-white rounded-3xl p-4 shadow-soft-lg border border-floral-pink-100 overflow-hidden group">
+        <div class="relative w-full max-w-[320px] sm:max-w-[360px] bg-white rounded-3xl p-3 sm:p-3.5 shadow-soft-lg border border-floral-pink-100 group">
           <div class="aspect-[3/4] rounded-2xl overflow-hidden bg-floral-pink-100 relative">
             <img
               src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=800&q=80"
@@ -91,15 +91,15 @@ const waLink = `https://wa.me/${waNumber}?text=${waHeroMessage}`;
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               loading="eager"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
             
             <!-- Floating tag on bottom of image -->
-            <div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md rounded-xl p-3 border border-white/40 flex items-center justify-between">
-              <div>
-                <p class="text-xs font-semibold text-floral-dark">Signature Rose & Lily Bouquet</p>
-                <p class="text-[11px] text-floral-muted">Made with passion</p>
+            <div class="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-3.5 sm:left-3.5 sm:right-3.5 bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl p-2.5 sm:p-3 border border-white/60 flex items-center justify-between shadow-md">
+              <div class="min-w-0 pr-2">
+                <p class="text-xs font-bold text-floral-dark truncate">Signature Rose Bouquet</p>
+                <p class="text-[10px] sm:text-[11px] text-floral-muted">Fresh & Handcrafted</p>
               </div>
-              <span class="px-2.5 py-1 bg-floral-pink-100 text-floral-pink-700 text-[10px] font-bold rounded-full">
+              <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-floral-pink-100 text-floral-pink-700 text-[9px] sm:text-[10px] font-bold rounded-full whitespace-nowrap shrink-0">
                 BEST SELLER
               </span>
             </div>
@@ -107,28 +107,28 @@ const waLink = `https://wa.me/${waNumber}?text=${waHeroMessage}`;
         </div>
 
         <!-- Floating Badge: Google Review / Rating -->
-        <div class="absolute -top-4 -left-4 sm:top-6 sm:-left-8 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 shadow-soft border border-floral-pink-100 flex items-center gap-3 animate-float">
-          <div class="w-10 h-10 rounded-full bg-floral-gold-100 flex items-center justify-center text-floral-gold-500 font-bold">
+        <div class="absolute -top-3 -left-2 sm:top-2 sm:-left-6 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 shadow-soft border border-floral-pink-100 flex items-center gap-2.5 sm:gap-3 animate-float z-20">
+          <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-floral-gold-100 flex items-center justify-center text-floral-gold-500 font-bold text-xs sm:text-sm shrink-0">
             ★
           </div>
           <div>
             <div class="flex items-center gap-1">
-              <span class="text-xs font-bold text-floral-dark">5.0 Star Rating</span>
+              <span class="text-[11px] sm:text-xs font-bold text-floral-dark">5.0 Star Rating</span>
             </div>
-            <p class="text-[11px] text-floral-muted">Pelanggan Puas Karawang</p>
+            <p class="text-[10px] sm:text-[11px] text-floral-muted">Pelanggan Puas Karawang</p>
           </div>
         </div>
 
         <!-- Floating Badge: Fast Delivery / Custom -->
-        <div class="absolute -bottom-5 -right-4 sm:bottom-4 sm:-right-6 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 shadow-soft border border-floral-pink-100 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-floral-pink-100 flex items-center justify-center text-floral-pink-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <div class="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-4 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 shadow-soft border border-floral-pink-100 flex items-center gap-2.5 sm:gap-3 z-20">
+          <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-floral-pink-100 flex items-center justify-center text-floral-pink-600 shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <p class="text-xs font-bold text-floral-dark">Same Day Available</p>
-            <p class="text-[11px] text-floral-muted">Area Karawang & Sekitar</p>
+            <p class="text-[11px] sm:text-xs font-bold text-floral-dark">Same Day Available</p>
+            <p class="text-[10px] sm:text-[11px] text-floral-muted">Area Karawang & Sekitar</p>
           </div>
         </div>
 

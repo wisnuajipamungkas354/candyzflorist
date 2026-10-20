@@ -26,7 +26,7 @@ const benefits = [
 <section id="why-us" class="py-24 bg-floral-warm/40 relative">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
-    <div class="text-center max-w-3xl mx-auto mb-16">
+    <div class="section-header text-center max-w-3xl mx-auto mb-16">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-floral-pink-100 text-floral-pink-700 text-xs font-semibold uppercase tracking-wider mb-4">
         Why Candyzflorist?
       </div>
@@ -41,8 +41,8 @@ const benefits = [
     <!-- 4 Benefits Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
       {benefits.map((item) => (
-        <div class="bg-white rounded-3xl p-8 shadow-soft hover:shadow-soft-lg border border-floral-pink-100/70 hover:border-floral-pink-300 transition-all duration-300 flex flex-col items-center text-center group hover:-translate-y-1">
-          <div class="w-16 h-16 rounded-2xl bg-floral-pink-50 group-hover:bg-floral-pink-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300 text-floral-pink-500">
+        <div data-tilt class="why-card tilt-card bg-white rounded-3xl p-8 shadow-soft hover:shadow-soft-lg border border-floral-pink-100/70 hover:border-floral-pink-300 transition-colors duration-300 flex flex-col items-center text-center group cursor-default">
+          <div class="w-16 h-16 rounded-2xl bg-floral-pink-50 group-hover:bg-floral-pink-500 group-hover:text-white flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-300 text-floral-pink-500">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d={item.iconPath} />
             </svg>
